@@ -22,8 +22,8 @@ export default function UsersClient() {
           "https://jsonplaceholder.typicode.com/users"
         );
         if (!response.ok) throw new Error("Failed to fetch users");
-        const data = await response.json();
-        setUsers(data);
+        const data = await response.json();// Parse the JSON response
+        setUsers(data);// Update the users state
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message);
@@ -37,7 +37,7 @@ export default function UsersClient() {
     fetchUsers();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div>Loading data...</div>;
   if (error) return <div>{error}</div>;
 
   return (
