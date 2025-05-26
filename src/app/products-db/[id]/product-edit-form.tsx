@@ -1,16 +1,16 @@
 "use client";
 
-import { createProduct, FormState } from "@/actions/products"; // Import the action and types
+import { editProduct, FormState } from "@/actions/products";
 import { useActionState } from "react";
+import {Product} from "@/app/products-db/page";
 
-
-
-export default function AddProductPage() {
-
+export default function EditProductForm({product}:{product: Product}) {
     const initialState: FormState = {
         errors: {},
     };
-    const [state, formAction, isPending] = useActionState(createProduct, initialState); // This hook is used to manage the form state
+
+    const editProductWithId = editProduct.bind(null, product.id);
+    const [state, formAction, isPending] = useActionState(editProductWithId, initialState);
     
 
     return (
@@ -24,6 +24,7 @@ export default function AddProductPage() {
                             type="text"
                             className="block w-full p-3 text-white border rounded border-amber-300 text-lg"
                             name="title"
+                            defaultValue={product.title} // Set the default value to the product title
 
                         />
                     </label>
@@ -38,6 +39,7 @@ export default function AddProductPage() {
                             type="number"
                             className="block w-full p-3 text-white border rounded border-amber-300 text-lg"
                             name="price"
+                            defaultValue={product.price} // Set the default value to the product price
 
                         />
                     </label>
@@ -51,7 +53,7 @@ export default function AddProductPage() {
                         <textarea
                             className="block w-full p-3 text-white border rounded border-amber-300 text-lg min-h-[100px]"
                             name="description"
-
+                            defaultValue={product.description ?? ""} // Set the default value to the product description, or an empty string if null
                         />
                     </label>
                     {state.errors.description && (
