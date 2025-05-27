@@ -1,7 +1,8 @@
 "use server"; 
 
-import { addProduct,updateProduct } from "@/prisma-db";
-import { redirect } from "next/navigation";
+import { addProduct,updateProduct,deleteProduct } from "@/prisma-db";
+import {revalidatePath} from "next/cache";
+import { redirect } from "next/navigation"; // Import redirect from next/navigation
 
 export type Errors = {
     title?: string;
@@ -67,4 +68,10 @@ export async function editProduct(
 
     await updateProduct(id,title, price, description);
     redirect("/products-db"); // Redirect to the products page after adding a product
+}
+
+
+export async function removeProduct(id: number) {
+    await deleteProduct(id);
+    revalidatePath("/products-db"); // Redirect to the products page after deleting a product
 }

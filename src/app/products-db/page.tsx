@@ -1,5 +1,7 @@
 import { getProducts } from "@/prisma-db";
-import Link from "next/link";
+import { ProductDetail } from "./product-detail";
+
+
 
 export type Product = {
     id: number;
@@ -8,21 +10,11 @@ export type Product = {
     description: string | null;
 };
 
-export default async function ProductsPrismaDBPage(){
+export default async function ProductsPrismaDBPage({searchParams}:{searchParams: {query?: string}}) {
+    // If you want to use searchParams, you can pass it to getProducts
+    const { query } = await searchParams;
+    // If you want to filter products based on a query, you can pass it to getProducts
+    const products: Product[] = await getProducts(query);
     
-    const products: Product[] = await getProducts();
-
-    return (
-        <ul className="space-y-4 p-4">
-            {products.map((product) => (
-                <li key={product.id} className="border p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
-                    <h2 className="text-xl font-semibold">
-                        <Link href={`/products-db/${product.id}`}>{product.title}</Link>
-                    </h2>
-                    <p className="text-gray-600">${product.price.toFixed(2)}</p>
-                    <p className="text-gray-800">{product.description}</p>
-                </li>
-            ))}
-        </ul>
-    );
+    return <ProductDetail products={products} />;   
 }
